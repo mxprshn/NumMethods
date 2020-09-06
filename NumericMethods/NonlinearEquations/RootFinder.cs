@@ -1,38 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace NonlinearEquations
 {
+    /// <summary>
+    /// Класс, содержащий методы для отделения и приближения корней нелинейных уравнений.
+    /// </summary>
     public static class RootFinder
     {
+        /// <summary>
+        /// Число отрезков, на которые исходный интервал разбивается при отделении корней.
+        /// </summary>
+        private const int SeparationStepNumber = 270;
+
+        /// <summary>
+        /// Максимальное допустимое число итераций для метода Ньютона.
+        /// </summary>
         private const double NewtonsMaxIterations = 30;
+
+        /// <summary>
+        /// Максимальное допустимое число итераций для модифицированного метода Ньютона.
+        /// </summary>
         private const double ModifiedNewtonsMaxIterations = 30;
-        private const double SecantMaxIterations = 500;
 
-        public static List<(double Start, double End)> Separate(Func<double, double> function, (double Start, double End) interval, int stepNumber)
+        /// <summary>
+        /// Максимальное допустимое число итераций для метода секущих.
+        /// </summary>
+        private const double SecantMaxIterations = 30;
+
+        /// <summary>
+        /// Выполняет выделение интервалов перемены знака для заданной функции на заданном отрезке.
+        /// </summary>
+        /// <param name="function">Рассматриваемая функция</param>
+        /// <param name="interval">Исходный интервал</param>
+        /// <returns>Список интервалов перемены знака</returns>
+        public static List<(double Start, double End)> Separate(Func<double, double> function, (double Start, double End) interval)
         {
-            // Check interval ends for being finite
-
             Console.WriteLine("* ОТДЕЛЕНИЕ КОРНЕЙ:\n" +
                 $"* Интервал: [{interval.Start.ToFormattedString()}; {interval.End.ToFormattedString()}]\n" +
-                $"* Число шагов: {stepNumber}\n");
+                $"* Число шагов: {SeparationStepNumber}\n");
+
+            if (!interval.Start.IsNumber() || !interval.End.IsNumber())
+            {
+                throw new ArgumentException("Концы интервала должны быть вещественными числами.");
+            }
 
             if (interval.Start >= interval.End)
             {
-                throw new RootFinderException("Отделение корней", "Начало исходного интервала должно быть меньше конца.");
+                throw new ArgumentException("Начало исходного интервала должно быть меньше конца.");
             }
 
-            if (stepNumber < 2)
-            {
-                throw new RootFinderException("Отделение корней", "Число шагов должно быть больше 1.");
-            }
+            var results = new List<(double Start, double End)>();
 
-            var result = new List<(double, double)>();
+            var stepLength = (interval.End - interval.Start) / SeparationStepNumber;
 
-            var stepLength = (interval.End - interval.Start) / stepNumber;
-
-            Console.WriteLine($"Рассчитанная длина шага: {stepLength.ToFormattedString()}\n");
+            Console.WriteLine($"Рассчитанная длина шага: {stepLength.ToFormattedString()}");
 
             var x1 = interval.Start;
             var x2 = x1 + stepLength;
@@ -40,36 +62,42 @@ namespace NonlinearEquations
             var y1 = function(x1);
             var y2 = function(x2);
 
-            Console.WriteLine($"x0: {x1.ToFormattedString()} | y0: {y1.ToFormattedString()}");
-
-            for (var i = 1; i <= stepNumber; ++i)
+            for (var i = 1; i <= SeparationStepNumber; ++i)
             {
-                // Check for zero separately.
-
                 if (y1 * y2 <= 0)
                 {
-                    Console.WriteLine($"! Перемена знака");
-                    result.Add((x1, x2));
+                    results.Add((x1, x2));
                 }
-
-                Console.WriteLine($"x{i}: {x2.ToFormattedString()} | y{i}: {y2.ToFormattedString()}");
-
-                if (i == stepNumber) break;
+                
+                if (i == SeparationStepNumber) break;
 
                 x1 = x2;
                 y1 = y2;
 
-                x2 = (i == stepNumber - 1) ? interval.End : (x1 + stepLength);
+                x2 = (i == SeparationStepNumber - 1) ? interval.End : (x1 + stepLength);
                 y2 = function(x2);
             }
 
             Console.WriteLine("\n* ОТДЕЛЕНИЕ КОРНЕЙ ЗАВЕРШЕНО:\n" +
-                $"* Найдено промежутков перемены знака: {result.Count}\n" +
-                $"-------------------------------------");
+                $"* Найдено промежутков перемены знака: {results.Count}");
 
-            return result;
+            foreach (var result in results)
+            {
+                Console.WriteLine($"* [{result.Start}; {result.End}]");
+            }
+
+            Console.WriteLine("-------------------------------------");
+
+            return results;
         }
 
+        /// <summary>
+        /// Выполняет уточнение корней методом бисекции.
+        /// </summary>
+        /// <param name="function">Рассматриваемая функция</param>
+        /// <param name="interval">Интервал перемены знака</param>
+        /// <param name="epsilon">Точность приближенного решения</param>
+        /// <returns>Результат уточнения корней и длина последнего промежутка</returns>
         public static (IntervalResult Result, double LastLength) Bisection(Func<double, double> function,
             (double Start, double End) interval, double epsilon)
         {
@@ -77,19 +105,24 @@ namespace NonlinearEquations
                 $"* Интервал: [{interval.Start.ToFormattedString()}; {interval.End.ToFormattedString()}]\n" +
                 $"* Эпсилон: {epsilon.ToFormattedString()}\n");
 
+            if (!interval.Start.IsNumber() || !interval.End.IsNumber())
+            {
+                throw new ArgumentException("Концы интервала должны быть вещественными числами.");
+            }
+
             if (epsilon <= 0)
             {
-                throw new RootFinderException("Бисекция", "Величина ε должна быть положительным числом.");
+                throw new ArgumentException("Величина эпсилон должна быть положительным числом.");
             }
 
             if (interval.Start >= interval.End)
             {
-                throw new RootFinderException("Бисекция", "Начало исходного интервала должно быть меньше конца.");
+                throw new ArgumentException("Начало исходного интервала должно быть меньше конца.");
             }
 
             if (function(interval.Start) * function(interval.End) >= 0)
             {
-                throw new RootFinderException("Бисекция", "Значения функции на концах интервала должны иметь разные знаки.");
+                throw new ArgumentException("Значения функции на концах интервала должны иметь разные знаки.");
             }
 
             var start = interval.Start;
@@ -124,17 +157,27 @@ namespace NonlinearEquations
 
             result.AbsoluteResidual = Math.Abs(yCenter);
             result.Root = center;
+            var lastLength = length / 2;
 
             Console.WriteLine("\n* БИСЕКЦИЯ ЗАВЕРШЕНА:\n" +
                 $"* Начальное приближение: {result.InitialApproximations[0].ToFormattedString()}\n" +
                 $"* Итоговое приближение: {result.Root.ToFormattedString()}\n" +
                 $"* Итераций: {result.IterationCount}\n" +
                 $"* Абсолютная величина невязки: {result.AbsoluteResidual.ToFormattedString()}\n" +
+                $"* Длина последнего отрезка: {lastLength.ToFormattedString()}\n" +
                 $"-------------------------------------");
 
-            return (result, length / 2);
+            return (result, lastLength);
         }
 
+        /// <summary>
+        /// Выполняет уточнение корней методом Ньютона.
+        /// </summary>
+        /// <param name="function">Рассматриваемая функция</param>
+        /// <param name="derivative">Производная</param>
+        /// <param name="sDerivative">Вторая производная</param>
+        /// <param name="interval">Исходный интервал</param>
+        /// <param name="epsilon">Точность приближенного решения</param>
         public static IntervalResult Newtons(Func<double, double> function, Func<double, double> derivative,
             Func<double, double> sDerivative, (double Start, double End) interval, double epsilon)
         {
@@ -142,19 +185,24 @@ namespace NonlinearEquations
                 $"* Интервал: [{interval.Start.ToFormattedString()}; {interval.End.ToFormattedString()}]\n" +
                 $"* Эпсилон: {epsilon.ToFormattedString()}\n");
 
+            if (!interval.Start.IsNumber() || !interval.End.IsNumber())
+            {
+                throw new ArgumentException("Концы интервала должны быть вещественными числами.");
+            }
+
             if (epsilon <= 0)
             {
-                throw new RootFinderException("Метод Ньютона", "Величина ε должна быть положительным числом.");
+                throw new ArgumentException("Величина эпсилон должна быть положительным числом.");
             }
 
             if (interval.Start >= interval.End)
             {
-                throw new RootFinderException("Метод Ньютона", "Начало исходного интервала должно быть меньше конца.");
+                throw new ArgumentException("Начало исходного интервала должно быть меньше конца.");
             }
 
             if (function(interval.Start) * function(interval.End) >= 0)
             {
-                throw new RootFinderException("Метод Ньютона", "Значения функции на концах интервала должны иметь разные знаки.");
+                throw new ArgumentException("Значения функции на концах интервала должны иметь разные знаки.");
             }
 
             var random = new Random();
@@ -225,6 +273,14 @@ namespace NonlinearEquations
             return result;
         }
 
+        /// <summary>
+        /// Выполняет уточнение корней модифицированным методом Ньютона.
+        /// </summary>
+        /// <param name="function">Рассматриваемая функция</param>
+        /// <param name="derivative">Производная</param>
+        /// <param name="sDerivative">Вторая производная</param>
+        /// <param name="interval">Исходный интервал</param>
+        /// <param name="epsilon">Точность приближенного решения</param>
         public static IntervalResult NewtonsModified(Func<double, double> function, Func<double, double> derivative,
             Func<double, double> sDerivative, (double Start, double End) interval, double epsilon)
         {
@@ -232,19 +288,24 @@ namespace NonlinearEquations
                 $"* Интервал: [{interval.Start.ToFormattedString()}; {interval.End.ToFormattedString()}]\n" +
                 $"* Эпсилон: {epsilon.ToFormattedString()}\n");
 
+            if (!interval.Start.IsNumber() || !interval.End.IsNumber())
+            {
+                throw new ArgumentException("Концы интервала должны быть вещественными числами.");
+            }
+
             if (epsilon <= 0)
             {
-                throw new RootFinderException("Метод Ньютона", "Величина ε должна быть положительным числом.");
+                throw new ArgumentException("Величина эпсилон должна быть положительным числом.");
             }
 
             if (interval.Start >= interval.End)
             {
-                throw new RootFinderException("Метод Ньютона", "Начало исходного интервала должно быть меньше конца.");
+                throw new ArgumentException("Начало исходного интервала должно быть меньше конца.");
             }
 
             if (function(interval.Start) * function(interval.End) >= 0)
             {
-                throw new RootFinderException("Метод Ньютона", "Значения функции на концах интервала должны иметь разные знаки.");
+                throw new ArgumentException("Значения функции на концах интервала должны иметь разные знаки.");
             }
 
             var random = new Random();
@@ -315,6 +376,12 @@ namespace NonlinearEquations
             return result;
         }
 
+        /// <summary>
+        /// Выполняет уточнение корней методом секущих.
+        /// </summary>
+        /// <param name="function">Рассматриваемая функция</param>
+        /// <param name="interval">Исходный интервал</param>
+        /// <param name="epsilon">Точность приближенного решения</param>
         public static IntervalResult Secant(Func<double, double> function,
             (double Start, double End) interval, double epsilon)
         {
@@ -322,19 +389,24 @@ namespace NonlinearEquations
                 $"* Интервал: [{interval.Start.ToFormattedString()}; {interval.End.ToFormattedString()}]\n" +
                 $"* Эпсилон: {epsilon.ToFormattedString()}\n");
 
+            if (!interval.Start.IsNumber() || !interval.End.IsNumber())
+            {
+                throw new ArgumentException("Концы интервала должны быть вещественными числами.");
+            }
+
             if (epsilon <= 0)
             {
-                throw new RootFinderException("Метод Ньютона", "Величина ε должна быть положительным числом.");
+                throw new ArgumentException("Величина эпсилон должна быть положительным числом.");
             }
 
             if (interval.Start >= interval.End)
             {
-                throw new RootFinderException("Метод Ньютона", "Начало исходного интервала должно быть меньше конца.");
+                throw new ArgumentException("Начало исходного интервала должно быть меньше конца.");
             }
 
             if (function(interval.Start) * function(interval.End) >= 0)
             {
-                throw new RootFinderException("Метод Ньютона", "Значения функции на концах интервала должны иметь разные знаки.");
+                throw new ArgumentException("Значения функции на концах интервала должны иметь разные знаки.");
             }
 
             var random = new Random();
