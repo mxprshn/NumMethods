@@ -21,12 +21,33 @@ namespace NonlinearEquations
 
             (double Start, double End) interval = (-5, 5);
 
-            Console.WriteLine("** ЛАБОРАТОРНАЯ РАБОТА №1\n" +
+            Console.Write("** ЛАБОРАТОРНАЯ РАБОТА №1\n" +
                 "** ЧИСЛЕННЫЕ МЕТОДЫ РЕШЕНИЯ НЕЛИНЕЙНЫХ УРАВНЕНИЙ\n" +
-                $"** Интервал:[{interval.Start.ToFormattedString()}; {interval.End.ToFormattedString()}]\n" +
-                "** Функция: f(x) = 1.2x^4 + 2x^3 - 13x^2 - 14.2x - 24.1\n" +
-                $"** Эпсилон: {epsilon.ToFormattedString()}\n" +
-                "-------------------------------------");
+                "** Введите начало отрезка: ");
+
+            while (!double.TryParse(Console.ReadLine(), out interval.Start))
+            {
+                Console.Write("** Начало отрезка должно быть вещественным числом.\n" +
+                    "** Введите начало отрезка: ");
+            }
+
+            Console.Write("** Введите конец отрезка: ");
+
+            while (!double.TryParse(Console.ReadLine(), out interval.End))
+            {
+                Console.Write("** Конец отрезка должен быть вещественным числом.\n" +
+                    "** Введите конец отрезка: ");
+            }
+
+            Console.Write("** Введите точность:");
+
+            while (!double.TryParse(Console.ReadLine(), out epsilon))
+            {
+                Console.Write("** Точность должна быть вещественным числом.\n" +
+                    "** Введите точность: ");
+            }
+
+            Console.WriteLine("-------------------------------------");
 
             try
             {
