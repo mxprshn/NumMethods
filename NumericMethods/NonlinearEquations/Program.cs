@@ -66,20 +66,8 @@ namespace NonlinearEquations
                 foreach (var result in results)
                 {
                     RootFinder.Bisection(function, result, epsilon);
-                }
-
-                foreach (var result in results)
-                {
                     RootFinder.Newtons(function, derivative, sDerivative, result, epsilon);
-                }
-
-                foreach (var result in results)
-                {
                     RootFinder.NewtonsModified(function, derivative, sDerivative, result, epsilon);
-                }
-
-                foreach (var result in results)
-                {
                     RootFinder.Secant(function, result, epsilon);
                 }
             }
