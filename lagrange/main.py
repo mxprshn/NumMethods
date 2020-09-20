@@ -59,7 +59,7 @@ def interpolation_ui():
         x = start + segment_length * i
         value_table.append((x, function(x)))
 
-    print("Таблица значений функции:")
+    print(f"Таблица значений функции (число значений: {number_of_values}):")
 
     print(format_float_table(value_table, "x", "f(x)"))
 
@@ -95,7 +95,7 @@ def interpolation_ui():
 РЕЗУЛЬТАТ:""")
 
     interpolation_point_y = lagrange.interpolate(interpolation_nodes, interpolation_point_x)
-    print(f"Значение интерполяционного многочлена в точке {format_float(interpolation_point_x)}"
+    print(f"Значение интерполяционного многочлена степени {interpolation_degree} в точке интерполирования {format_float(interpolation_point_x)}"
           f": {format_float(interpolation_point_y)}")
 
     value_error = abs(function(interpolation_point_x) - interpolation_point_y)
