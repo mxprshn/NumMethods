@@ -6,7 +6,7 @@ from format import format_error
 
 
 def function(x):
-    return 2 * x  # x ** 2 + 7 * (x ** 4) + 4 * (x ** 6)  # math.cos(x) + 2 * x
+    return math.cos(x) + 2  # x ** 2 + 7 * (x ** 4) + 4 * (x ** 6)  # 2 * x
 
 
 def interpolation_ui():
@@ -101,7 +101,7 @@ def interpolation_ui():
     value_error = abs(function(interpolation_point_x) - interpolation_point_y)
     print(f"Абсолютная фактическая погрешность: {format_float(value_error)}")
 
-    if input("\nЧтобы выйти из программы, введите q: ") == "q":
+    if input("\nЕсли вы хотите выйти из программы, введите q: ") == "q":
         return True
 
     return False
