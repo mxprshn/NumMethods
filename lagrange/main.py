@@ -9,7 +9,17 @@ def function(x):
     return math.cos(x) + 2  # x ** 2 + 7 * (x ** 4) + 4 * (x ** 6)  # 2 * x
 
 
-def interpolation_ui():
+if __name__ == '__main__':
+
+    print(f"""
+ЛАБОРАТОРНАЯ РАБОТА №2
+
+Задача алгебраического интерполирования
+Интерполяционный многочлен в форме Лагранжа
+
+Вариант №10
+""")
+
     # Число значений в таблице функции
     number_of_values = 0
 
@@ -63,61 +73,46 @@ def interpolation_ui():
 
     print(format_float_table(value_table, "x", "f(x)"))
 
-    while True:
-        try:
-            interpolation_point_x = float(input("Введите точку интерполяции: "))
-            break
-        except ValueError:
-            print(format_error("Некорректное значение: введите вещественное число"))
+    rerun = True
 
-            interpolation_point_x = 0.0
+    while rerun:
+        while True:
+            try:
+                interpolation_point_x = float(input("Введите точку интерполяции: "))
+                break
+            except ValueError:
+                print(format_error("Некорректное значение: введите вещественное число"))
 
-    while True:
-        try:
-            interpolation_degree = int(input(f"Введите степень интерполяционного многочлена (< {number_of_values}): "))
-            if interpolation_degree < 1 or interpolation_degree >= number_of_values:
-                raise ValueError
-            break
-        except ValueError:
-            print(format_error("Некорректное значение: введите целое число, большее нуля и меньшее числа значений в "
-                               "таблице функции"))
+                interpolation_point_x = 0.0
 
-    value_table.sort(key=lambda xy: abs(xy[0] - interpolation_point_x))
-    interpolation_nodes = value_table[:interpolation_degree + 1]
+        while True:
+            try:
+                interpolation_degree = int(input(f"Введите степень интерполяционного многочлена (< {number_of_values}): "))
+                if interpolation_degree < 1 or interpolation_degree >= number_of_values:
+                    raise ValueError
+                break
+            except ValueError:
+                print(format_error("Некорректное значение: введите целое число, большее нуля и меньшее числа значений в "
+                                "таблице функции"))
 
-    print("Узлы интерполяции:")
+        value_table.sort(key=lambda xy: abs(xy[0] - interpolation_point_x))
+        interpolation_nodes = value_table[:interpolation_degree + 1]
 
-    print(format_float_table(interpolation_nodes, "x", "f(x)"))
+        print("Узлы интерполяции:")
 
-    print(f"""Точка интерполирования: {format_float(interpolation_point_x)}
+        print(format_float_table(interpolation_nodes, "x", "f(x)"))
+
+        print(f"""Точка интерполирования: {format_float(interpolation_point_x)}
 Степень интерполяционного многочлена: {interpolation_degree}
 
 РЕЗУЛЬТАТ:""")
 
-    interpolation_point_y = lagrange.interpolate(interpolation_nodes, interpolation_point_x)
-    print(f"Значение интерполяционного многочлена степени {interpolation_degree} в точке интерполирования {format_float(interpolation_point_x)}"
-          f": {format_float(interpolation_point_y)}")
+        interpolation_point_y = lagrange.interpolate(interpolation_nodes, interpolation_point_x)
+        print(f"Значение интерполяционного многочлена степени {interpolation_degree} в точке интерполирования {format_float(interpolation_point_x)}"
+            f": {format_float(interpolation_point_y)}")
 
-    value_error = abs(function(interpolation_point_x) - interpolation_point_y)
-    print(f"Абсолютная фактическая погрешность: {format_float(value_error)}")
+        value_error = abs(function(interpolation_point_x) - interpolation_point_y)
+        print(f"Абсолютная фактическая погрешность: {format_float(value_error)}")
 
-    if input("\nЕсли вы хотите выйти из программы, введите q: ") == "q":
-        return True
-
-    return False
-
-
-if __name__ == '__main__':
-
-    print(f"""
-ЛАБОРАТОРНАЯ РАБОТА №2
-
-Задача алгебраического интерполирования
-Интерполяционный многочлен в форме Лагранжа
-
-Вариант №10
-""")
-
-    while True:
-        if interpolation_ui():
-            break
+        if input("\nЕсли вы хотите выйти из программы, введите q: ") == "q":
+            rerun = False
