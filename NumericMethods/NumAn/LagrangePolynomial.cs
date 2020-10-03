@@ -6,7 +6,7 @@ namespace NumAn
 {
     namespace Interpolation
     {
-        public class LagrangePolynomial
+        public class LagrangePolynomial : IInterpolationPolynomial
         {
             private (double x, double y)[] dataPoints;
 

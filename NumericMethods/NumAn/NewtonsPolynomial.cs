@@ -6,7 +6,7 @@ namespace NumAn
 {
     namespace Interpolation
     {
-        public class NewtonsPolynomial
+        public class NewtonsPolynomial : IInterpolationPolynomial
         {
             private double[][] dividedDifferences;
             private (double x, double y)[] dataPoints;
