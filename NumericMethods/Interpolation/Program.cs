@@ -9,12 +9,18 @@ namespace Interpolation
     {
         static double Function(double x)
         {
+            // return 2 * Math.Pow(x, 2) + 10 * Math.Pow(x, 4);
             return Math.Cos(x) + 2;
         }
 
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+            Console.WriteLine("Лабораторная работа #2\n\n" +
+                "Задача алгебраического интерполирования\n" +
+                "Интерполяционные многочлены Ньютона и Лагранжа\n\n" +
+                "Вариант #10\n");
 
             Console.Write("Введите число значений в таблице функции: ");
 
@@ -34,7 +40,7 @@ namespace Interpolation
                 Console.Write("Некорректное значение: введите вещественное число: ");
             }
 
-            Console.Write("Введите начало отрезка: ");
+            Console.Write("Введите конец отрезка: ");
 
             var end = 0.0;
 
@@ -53,8 +59,8 @@ namespace Interpolation
                 functionTable[i] = (x, Function(x));
             }
 
-            Console.WriteLine($"Таблица значений функции (число значений: {numberOfValues})");
-            Console.Write(functionTable.Format());
+            Console.WriteLine($"\nТаблица значений функции (число значений: {numberOfValues})");
+            Console.WriteLine(functionTable.Format("x", "f(x)"));
 
             while (Interpolation(functionTable)) { };
         }
@@ -84,23 +90,42 @@ namespace Interpolation
             var dataPoints = functionTable.OrderBy(value => Math.Abs(interpolationPoint - value.x))
                 .Take(interpolationDegree + 1).ToArray();
 
-            Console.WriteLine($"Узлы интерполяции");
-            Console.Write(dataPoints.Format());
+            Console.WriteLine($"\nУзлы интерполяции");
+            Console.WriteLine(dataPoints.Format("x", "f(x)"));
 
             Console.WriteLine($"Точка интерполирования: {interpolationPoint.Format()}\n" +
                 $"Степень интерполяционного многочлена: {interpolationDegree}\n");
 
 
-            var interpolated = new NewtonsPolynomial(dataPoints);
-            var interpolationPointY = interpolated.ToFunction()(interpolationPoint);
+            var newtonInterpolated = new NewtonsPolynomial(dataPoints);
+            var newtonInterpolationPointY = newtonInterpolated.ToFunction()(interpolationPoint);
 
-            Console.WriteLine($"Значение интерполяционного многочлена в точке {interpolationPoint.Format()}: " +
-                $"{interpolationPointY.Format()}");
+            var lagrangeInterpolated = new LagrangePolynomial(dataPoints);
+            var lagrangeInterpolationPointY = lagrangeInterpolated.ToFunction()(interpolationPoint);
+
+            Console.WriteLine($"Значение интерполяционного многочлена Ньютона в точке {interpolationPoint.Format()}: " +
+                $"{newtonInterpolationPointY.Format()}");
 
             Console.WriteLine($"Абсолютная фактическая погрешность: " +
-                $"{Math.Abs(Function(interpolationPoint) - interpolationPointY).Format()}");
+                $"{Math.Abs(Function(interpolationPoint) - newtonInterpolationPointY).Format()}");
 
-            if (Console.ReadLine() == "q")
+            Console.WriteLine($"Значение интерполяционного многочлена Лагранжа в точке {interpolationPoint.Format()}: " +
+                $"{lagrangeInterpolationPointY.Format()}");
+
+            var originalValue = Function(interpolationPoint);
+
+            Console.WriteLine($"Абсолютная фактическая погрешность: " +
+                $"{Math.Abs(originalValue - lagrangeInterpolationPointY).Format()}");
+
+            Console.WriteLine($"Значение исходной функции в точке интерполяции: " +
+                $"{originalValue.Format()}");
+
+            Console.WriteLine($"Модуль разности значений интерполяционных многочленов Ньютона и Лагранжа: " +
+                $"{Math.Abs(newtonInterpolationPointY - lagrangeInterpolationPointY).Format()}");
+
+            Console.WriteLine($"\nЧтобы выйти, нажмите \'Esc\'\n");
+
+            if (Console.ReadKey().Key == ConsoleKey.Escape)
             {
                 return false;
             }
