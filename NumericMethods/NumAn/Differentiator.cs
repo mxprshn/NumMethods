@@ -36,7 +36,7 @@ namespace NumAn
                 for (var i = 1; i < dataPoints.Length - 1; ++i)
                 {
                     var value = (dataPoints[i + 1].y - 2 * dataPoints[i].y + dataPoints[i - 1].y) /
-                        Math.Pow(dataPoints[i + 1].x - dataPoints[i - 1].x, 2);
+                        Math.Pow(dataPoints[i + 1].x - dataPoints[i].x, 2);
 
                     result[i - 1] = (dataPoints[i].x, value);
                 }

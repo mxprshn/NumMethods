@@ -10,18 +10,21 @@ namespace Differentiation
         static double Function(double x)
         {
             // return 2 * Math.Pow(x, 2) + 10 * Math.Pow(x, 4);
-            return Math.Exp(1.5 * x);
+             return Math.Exp(1.5 * x);
+            //return Math.Pow(x, 3);
         }
 
         static double FirstDerivative(double x)
         {
             // return 2 * Math.Pow(x, 2) + 10 * Math.Pow(x, 4);
-            return 1.5 * Math.Exp(1.5 * x);
+             return 1.5 * Math.Exp(1.5 * x);
+            // return 3 * Math.Pow(x, 2);
         }
 
         static double SecondDerivative(double x)
         {
-            // return 2 * Math.Pow(x, 2) + 10 * Math.Pow(x, 4);
+            //return 2 * Math.Pow(x, 2) + 10 * Math.Pow(x, 4);
+            //return 6 * x;
             return 2.25 * Math.Exp(1.5 * x);
         }
 
@@ -75,7 +78,7 @@ namespace Differentiation
             }
 
             Console.WriteLine($"\nТаблица значений функции (число значений: {numberOfValues})");
-            Console.WriteLine(functionTable.Format("x", "f(x)"));
+            Console.WriteLine(functionTable.Format("x", "f(x)", 25));
 
             var differentiator = new Differentiator(functionTable);
             var firstDerivative = differentiator.FirstDerivative();
@@ -102,7 +105,7 @@ namespace Differentiation
 
             }
 
-            Console.WriteLine(resultTable.Format(50));
+            Console.WriteLine(resultTable.Format(25));
 
             Console.WriteLine($"\nЧтобы выйти, нажмите \'Esc\'\n");
 

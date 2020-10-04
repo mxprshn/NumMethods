@@ -12,7 +12,7 @@ namespace InverseInterpolation
         {
             // return 2 * Math.Pow(x, 2) + 10 * Math.Pow(x, 4);
             // return 2 * x;
-            return Math.Pow(2, x);
+            return Math.Exp(x) + 1;
         }
 
         static void Main(string[] args)
@@ -23,7 +23,7 @@ namespace InverseInterpolation
                 "Задача обратного интерполирования\n\n" +
                 "Вариант #10\n");
 
-            Console.Write("Введите число значений в таблице функции: ");
+            Console.Write("Введите число значений в таблице функции (m + 1): ");
 
             var numberOfValues = 0;
 
@@ -32,7 +32,7 @@ namespace InverseInterpolation
                 Console.Write("Некорректное значение: введите целое число, большее единицы: ");
             }
 
-            Console.Write("Введите начало отрезка: ");
+            Console.Write("Введите начало отрезка (a): ");
 
             var start = 0.0;
 
@@ -41,7 +41,7 @@ namespace InverseInterpolation
                 Console.Write("Некорректное значение: введите вещественное число: ");
             }
 
-            Console.Write("Введите конец отрезка: ");
+            Console.Write("Введите конец отрезка (b): ");
 
             var end = 0.0;
 
@@ -68,7 +68,7 @@ namespace InverseInterpolation
 
         private static bool InverseInterpolation((double x, double y)[] functionTable)
         {
-            Console.Write("Введите значение функции в точке интерполяции: ");
+            Console.Write("Введите значение функции в точке интерполяции (F): ");
 
             var interpolationPointY = 0.0;
 
@@ -77,7 +77,18 @@ namespace InverseInterpolation
                 Console.Write("Некорректное значение: введите вещественное число: ");
             }
 
-            Console.Write($"Введите степень интерполяционного многочлена (< {functionTable.Length}): ");
+            Console.Write($"Введите степень интерполяционного многочлена для f^-1 (< {functionTable.Length}): ");
+
+            var inverseInterpolationDegree = 0;
+
+            while (!int.TryParse(Console.ReadLine(), out inverseInterpolationDegree) ||
+                inverseInterpolationDegree < 1 || inverseInterpolationDegree >= functionTable.Length)
+            {
+                Console.Write("Некорректное значение -- введите целое число, большее нуля и меньшее числа значений в " +
+                              "таблице функции: ");
+            }
+
+            Console.Write($"Введите степень интерполяционного многочлена для f (< {functionTable.Length}): ");
 
             var interpolationDegree = 0;
 
@@ -88,7 +99,7 @@ namespace InverseInterpolation
                               "таблице функции: ");
             }
 
-            Console.Write("Введите точность: ");
+            Console.Write("Введите точность (epsilon) решения уравнения: ");
 
             var precision = 0.0;
 
@@ -99,7 +110,7 @@ namespace InverseInterpolation
 
             var inverseDataPoints = functionTable.Select(value => (value.y, value.x))
                 .OrderBy(value => Math.Abs(interpolationPointY - value.Item1))
-                .Take(interpolationDegree + 1).ToArray();
+                .Take(inverseInterpolationDegree + 1).ToArray();
 
             Console.WriteLine($"\nУзлы интерполяции для f^-1(x)");
             Console.WriteLine(inverseDataPoints.Format("x", "f^-1(x)"));
@@ -145,9 +156,10 @@ namespace InverseInterpolation
             Console.WriteLine($"\nУзлы интерполяции для f(x)");
             Console.WriteLine(dataPoints.Format("x", "f(x)"));            
 
-            Console.WriteLine($"Значение функции в точке интерполирования: {interpolationPointY.Format()}\n" +
-                $"Приближенная точка интерполирования: {approximateInterpolationPoint}\n" +
-                $"Степень интерполяционного многочлена: {interpolationDegree}\n");
+            Console.WriteLine($"Значение функции в точке интерполирования (F): {interpolationPointY.Format()}\n" +
+                $"Ближайшая точка x для узлов интерполяции f: {approximateInterpolationPoint}\n" +
+                $"Степень интерполяционного многочлена для f^-1: {inverseInterpolationDegree}\n" +
+                $"Степень интерполяционного многочлена для f: {interpolationDegree}\n");
 
             var inversePolynomial = new NewtonsPolynomial(inverseDataPoints);
             var inversePolynomialY = inversePolynomial.ToFunction()(interpolationPointY);
