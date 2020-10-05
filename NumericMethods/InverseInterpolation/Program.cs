@@ -167,7 +167,7 @@ namespace InverseInterpolation
             Console.WriteLine($"Значение x, полученное при интерполировании обратной функции: " +
                 $"{inversePolynomialY.Format()}");
 
-            Console.WriteLine($"Абсолютная фактическая погрешность: " +
+            Console.WriteLine($"Модуль невязки: " +
                 $"{Math.Abs(Function(inversePolynomialY) - interpolationPointY).Format()}\n");
 
             var polynomial = new NewtonsPolynomial(dataPoints);
@@ -192,7 +192,7 @@ namespace InverseInterpolation
                     Console.WriteLine($"Значение x, полученное при решении уравнения: " +
                     $"{result.Root.Format()}");
 
-                    Console.WriteLine($"Абсолютная фактическая погрешность: " +
+                    Console.WriteLine($"Модуль невязки: " +
                         $"{Math.Abs(Function(result.Root) - interpolationPointY).Format()}");
                 }
             }

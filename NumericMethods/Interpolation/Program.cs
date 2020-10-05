@@ -10,7 +10,7 @@ namespace Interpolation
         static double Function(double x)
         {
             // return 2 * Math.Pow(x, 2) + 10 * Math.Pow(x, 4);
-            return Math.Cos(x) + 2;
+            return Math.Cos(x) + 2 * x;
         }
 
         static void Main(string[] args)
