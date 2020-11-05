@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NumAn", "NumAn\NumAn.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interpolation", "Interpolation\Interpolation.csproj", "{32471347-FA58-4B28-BB38-54854CBCF57F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InverseInterpolation", "InverseInterpolation\InverseInterpolation.csproj", "{6F06623D-6D2E-4E8B-B7DA-9C0C3ABEAF58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InverseInterpolation", "InverseInterpolation\InverseInterpolation.csproj", "{6F06623D-6D2E-4E8B-B7DA-9C0C3ABEAF58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Differentiation", "Differentiation\Differentiation.csproj", "{9DB01B10-FAFE-4B2C-8849-B6CA23FD5B5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Differentiation", "Differentiation\Differentiation.csproj", "{9DB01B10-FAFE-4B2C-8849-B6CA23FD5B5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration", "Integration\Integration.csproj", "{75EA129E-4D07-4A76-8200-FD30DFD5F157}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{9DB01B10-FAFE-4B2C-8849-B6CA23FD5B5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DB01B10-FAFE-4B2C-8849-B6CA23FD5B5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DB01B10-FAFE-4B2C-8849-B6CA23FD5B5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75EA129E-4D07-4A76-8200-FD30DFD5F157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75EA129E-4D07-4A76-8200-FD30DFD5F157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75EA129E-4D07-4A76-8200-FD30DFD5F157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75EA129E-4D07-4A76-8200-FD30DFD5F157}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
