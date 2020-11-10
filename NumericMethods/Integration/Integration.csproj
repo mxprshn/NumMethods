@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CenterSpace.NMath.Standard.Windows.X64" Version="7.1.0.26" />
+    <PackageReference Include="MathNet.Numerics" Version="4.12.0" />
+    <PackageReference Include="NumSharp.Lite" Version="0.1.9" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\NumAn\NumAn.csproj" />
   </ItemGroup>
 
