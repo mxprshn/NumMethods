@@ -7,6 +7,11 @@ namespace NumAn
 {
     public static class FormatExtensions
     {
+        public static void PrintDivider()
+        {
+            Console.WriteLine("\n----------------------------------------------\n");
+        }
+
         public static string Format(this double value, int precision = 17)
         {
             return value.ToString($"g{precision}");

@@ -37,7 +37,6 @@ namespace Differentiation
                 "Вариант #10\n");
 
             while (Differentiation()) { };
-
         }
 
         private static bool Differentiation()
