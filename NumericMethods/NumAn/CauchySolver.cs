@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace NumAn
 {
@@ -10,6 +11,7 @@ namespace NumAn
         private double[] firstTaylors;
         private double[] derivatives;
 
+        private readonly Func<double, double, double> derivative;
         private readonly double targetX;
         private readonly double targetY;
         private readonly double segmentLength;
@@ -22,6 +24,7 @@ namespace NumAn
                 throw new ArgumentException("Число значений производных функции должно быть не меньше 5.");
             }
 
+            this.derivative = derivative;
             this.segmentLength = segmentLength;
             this.segmentNumber = segmentNumber;
             this.targetX = targetX;
@@ -65,7 +68,7 @@ namespace NumAn
             return result;
         }
 
-        public List<(double x, double y)> Adams()
+        public double[] Adams()
         {
             if (firstTaylors == null)
             {
@@ -78,38 +81,109 @@ namespace NumAn
                 finiteDifferences[i] = new double[segmentNumber + 1];
             }
 
-            Array.Copy(firstTaylors, finiteDifferences[0], firstTaylors.Length);
-
-            for (var i = 0; i < finiteDifferences.Length - 1; ++i)
+            for (var i = 0; i < firstTaylors.Length; ++i)
             {
-                for (var j = 0; j < firstTaylors.Length - i; ++j)
+                finiteDifferences[0][i] = firstTaylors[i];
+                finiteDifferences[1][i] = segmentLength * derivative(nodes[i], finiteDifferences[0][i]);
+
+            }
+
+            for (var i = 0; i < finiteDifferences.Length - 2; ++i)
+            {
+                for (var j = 0; j < firstTaylors.Length - i - 1; ++j)
                 {
-                    finiteDifferences[j] = finiteDifferences[]
+                    finiteDifferences[i + 2][j] = finiteDifferences[i + 1][j + 1] - finiteDifferences[i + 1][j];
                 }
             }
 
+            for (var i = firstTaylors.Length; i < finiteDifferences[0].Length; ++i)
+            {
+                var newYValue = finiteDifferences[0][i - 1] + finiteDifferences[1][i - 1] + 0.5 * finiteDifferences[2][i - 1] 
+                    + 5.0 / 12.0 * finiteDifferences[3][i - 1] + 3.0 / 8.0 * finiteDifferences[4][i - 1] + 251.0 / 720.0 * finiteDifferences[5][i - 1];
+
+                finiteDifferences[0][i] = newYValue;
+
+                finiteDifferences[1][i] = segmentLength * derivative(nodes[i], finiteDifferences[0][i]);
+
+                for (var j = 2; j < finiteDifferences.Length; ++j)
+                {
+                    finiteDifferences[j][i] = finiteDifferences[j - 1][i - 1] - finiteDifferences[j - 1][i];
+                }
+            }
+
+            return finiteDifferences[0];
         }
 
-        public List<(double x, double y)> RungeKutta()
+        public double[] RungeKutta()
         {
+            var result = new double[segmentNumber - 1];
+            var rightNodes = nodes.TakeLast(segmentNumber - 1).ToArray();
+            result[0] = targetY;
 
+            for (var i = 1; i < result.Length; ++i)
+            {
+                var k1 = segmentLength * derivative(rightNodes[i - 1], result[i - 1]);
+                var k2 = segmentLength * derivative(rightNodes[i - 1] + segmentLength * 0.5, result[i - 1] + k1 * 0.5);
+                var k3 = segmentLength * derivative(rightNodes[i - 1] + segmentLength * 0.5, result[i - 1] + k2 * 0.5);
+                var k4 = segmentLength * derivative(rightNodes[i], result[i - 1] + k3);
+
+                result[i] = result[i - 1] + (k1 + 2 * k2 + 2 * k3 + k4) / 6.0;
+            }
+
+            return result;
         }
 
-        public List<(double x, double y)> Euler(double segmentLength, int segmentNumber)
+        public double[] Euler(double segmentLength, int segmentNumber)
         {
+            var result = new double[segmentNumber - 1];
+            var rightNodes = nodes.TakeLast(segmentNumber - 1).ToArray();
+            result[0] = targetY;
 
+            for (var i = 1; i < result.Length; ++i)
+            {
+                result[i] = result[i - 1] + segmentLength * derivative(rightNodes[i - 1], result[i - 1]);
+            }
+
+            return result;
         }
 
-        public List<(double x, double y)> EulerI(double segmentLength, int segmentNumber)
+        public double[] EulerI(double segmentLength, int segmentNumber)
         {
+            var result = new double[segmentNumber - 1];
+            var rightNodes = nodes.TakeLast(segmentNumber - 1).ToArray();
 
+            var halfSegment = 0.5 * segmentLength;
+
+            result[0] = targetY;
+
+            for (var i = 1; i < result.Length; ++i)
+            {
+                var middleValue = result[i - 1] + halfSegment * derivative(rightNodes[i - 1], result[i - 1]);
+                result[i] = result[i - 1] + segmentLength * derivative(rightNodes[i - 1] + halfSegment, middleValue);
+            }
+
+            return result;
         }
 
 
 
-        public List<(double x, double y)> EulerII(double segmentLength, int segmentNumber)
+        public double[] EulerII(double segmentLength, int segmentNumber)
         {
+            var result = new double[segmentNumber - 1];
+            var rightNodes = nodes.TakeLast(segmentNumber - 1).ToArray();
 
+            var halfSegment = 0.5 * segmentLength;
+
+            result[0] = targetY;
+
+            for (var i = 1; i < result.Length; ++i)
+            {
+                var previousDerivativeValue = derivative(rightNodes[i - 1], result[i - 1]);
+                var preliminaryValue = result[i - 1] + segmentLength * previousDerivativeValue;
+                result[i] = result[i - 1] + halfSegment * (derivative(rightNodes[i], preliminaryValue) + previousDerivativeValue);
+            }
+
+            return result;
         }
     }
 }
