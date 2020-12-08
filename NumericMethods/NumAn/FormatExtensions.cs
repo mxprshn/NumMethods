@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using ConsoleTables;
 
 namespace NumAn
 {
@@ -29,6 +30,35 @@ namespace NumAn
             }
 
             return result.ToString();
+        }
+
+        public static void Format(this double[] values, string[] headers = null)
+        {
+            var actualHeaders = headers ?? Enumerable.Range(0, values.Length - 1).Select(n => n.ToString());
+            var table = new ConsoleTable(headers);
+            table.AddRow(values.Select(n => n.Format()));
+            table.Write(ConsoleTables.Format.Alternative);
+        }
+
+        public static void Format(this double[][] values, string[] verticalHeaders, string[] headers)
+        {
+            var table = new ConsoleTable(headers.Prepend("").ToArray());
+
+            for (var i = 0; i < values[0].Length; ++i)
+            {
+                var row = new string[values.Length + 1];
+
+                row[0] = verticalHeaders[i];
+
+                for (var j = 0; j < values.Length; ++j)
+                {
+                    row[j + 1] = values[j][i].Format();
+                }
+            
+                table.AddRow(row.ToArray());
+            }
+
+            table.Write(ConsoleTables.Format.Alternative);
         }
 
         public static string Format(this string[,] table, int maxLength)

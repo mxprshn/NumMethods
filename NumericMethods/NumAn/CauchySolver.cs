@@ -34,7 +34,7 @@ namespace NumAn
 
             for (var i = -2; i <= segmentNumber - 2; ++i)
             {
-                nodes[i + 2] = targetX + i * segmentNumber;
+                nodes[i + 2] = targetX + i * segmentLength;
             }
 
             this.derivatives = new double[derivatives.Length];
@@ -68,38 +68,43 @@ namespace NumAn
             return result;
         }
 
-        public double[] Adams()
+        public double[] Adams(double[] firstValues = null, bool printDifferences = false)
         {
-            if (firstTaylors == null)
+            if (firstTaylors == null && firstValues == null)
             {
                 Taylor();
             }
 
+            var first = firstValues ?? firstTaylors;
+
             var finiteDifferences = new double[6][];
+
             for (var i = 0; i < finiteDifferences.Length; ++i)
             {
                 finiteDifferences[i] = new double[segmentNumber + 1];
             }
 
-            for (var i = 0; i < firstTaylors.Length; ++i)
+            for (var i = 0; i < first.Length; ++i)
             {
-                finiteDifferences[0][i] = firstTaylors[i];
+                finiteDifferences[0][i] = first[i];
                 finiteDifferences[1][i] = segmentLength * derivative(nodes[i], finiteDifferences[0][i]);
 
             }
 
             for (var i = 0; i < finiteDifferences.Length - 2; ++i)
             {
-                for (var j = 0; j < firstTaylors.Length - i - 1; ++j)
+                for (var j = i + 1; j < first.Length; ++j)
                 {
-                    finiteDifferences[i + 2][j] = finiteDifferences[i + 1][j + 1] - finiteDifferences[i + 1][j];
+                    finiteDifferences[i + 2][j] = finiteDifferences[i + 1][j] - finiteDifferences[i + 1][j - 1];
                 }
             }
 
-            for (var i = firstTaylors.Length; i < finiteDifferences[0].Length; ++i)
+            // finiteDifferences.Format(Enumerable.Range(0, nodes.Length).Select(n => n.ToString()).ToArray(), new[]{ "y", "0", "1", "2", "3", "4" });
+
+            for (var i = first.Length; i < finiteDifferences[0].Length; ++i)
             {
-                var newYValue = finiteDifferences[0][i - 1] + finiteDifferences[1][i - 1] + 0.5 * finiteDifferences[2][i - 1] 
-                    + 5.0 / 12.0 * finiteDifferences[3][i - 1] + 3.0 / 8.0 * finiteDifferences[4][i - 1] + 251.0 / 720.0 * finiteDifferences[5][i - 1];
+                var newYValue = finiteDifferences[0][i - 1] + finiteDifferences[1][i - 1] + finiteDifferences[2][i - 1] / 2
+                    + 5 * finiteDifferences[3][i - 1] / 12 + 3 * finiteDifferences[4][i - 1] / 8 + 251 * finiteDifferences[5][i - 1] / 720;
 
                 finiteDifferences[0][i] = newYValue;
 
@@ -107,8 +112,10 @@ namespace NumAn
 
                 for (var j = 2; j < finiteDifferences.Length; ++j)
                 {
-                    finiteDifferences[j][i] = finiteDifferences[j - 1][i - 1] - finiteDifferences[j - 1][i];
+                    finiteDifferences[j][i] = finiteDifferences[j - 1][i] - finiteDifferences[j - 1][i - 1];
                 }
+
+                // finiteDifferences.Format(Enumerable.Range(0, nodes.Length).Select(n => n.ToString()).ToArray(), new[]{ "y", "0", "1", "2", "3", "4" });
             }
 
             return finiteDifferences[0];
@@ -133,7 +140,7 @@ namespace NumAn
             return result;
         }
 
-        public double[] Euler(double segmentLength, int segmentNumber)
+        public double[] Euler()
         {
             var result = new double[segmentNumber - 1];
             var rightNodes = nodes.TakeLast(segmentNumber - 1).ToArray();
@@ -147,7 +154,7 @@ namespace NumAn
             return result;
         }
 
-        public double[] EulerI(double segmentLength, int segmentNumber)
+        public double[] EulerI()
         {
             var result = new double[segmentNumber - 1];
             var rightNodes = nodes.TakeLast(segmentNumber - 1).ToArray();
@@ -167,7 +174,7 @@ namespace NumAn
 
 
 
-        public double[] EulerII(double segmentLength, int segmentNumber)
+        public double[] EulerII()
         {
             var result = new double[segmentNumber - 1];
             var rightNodes = nodes.TakeLast(segmentNumber - 1).ToArray();

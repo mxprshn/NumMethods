@@ -17,9 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Integration", "Integration\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaussIntegration", "GaussIntegration\GaussIntegration.csproj", "{83866D1D-F578-4190-8211-608625D198E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DifferentialEquations", "DifferentialEquations\DifferentialEquations.csproj", "{50F11475-1C85-44D0-AA70-E60DB47F794E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CauchyProblem", "CauchyProblem\CauchyProblem.csproj", "{C67DBCD8-2F52-441D-8ECB-4716F9276411}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CauchyProblem", "CauchyProblem\CauchyProblem.csproj", "{C67DBCD8-2F52-441D-8ECB-4716F9276411}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,10 +53,6 @@ Global
 		{83866D1D-F578-4190-8211-608625D198E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83866D1D-F578-4190-8211-608625D198E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83866D1D-F578-4190-8211-608625D198E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{50F11475-1C85-44D0-AA70-E60DB47F794E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50F11475-1C85-44D0-AA70-E60DB47F794E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50F11475-1C85-44D0-AA70-E60DB47F794E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50F11475-1C85-44D0-AA70-E60DB47F794E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C67DBCD8-2F52-441D-8ECB-4716F9276411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C67DBCD8-2F52-441D-8ECB-4716F9276411}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C67DBCD8-2F52-441D-8ECB-4716F9276411}.Release|Any CPU.ActiveCfg = Release|Any CPU
