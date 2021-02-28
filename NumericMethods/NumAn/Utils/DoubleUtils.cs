@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NumAn
 {
-    public class Utils
+    public class DoubleUtils
     {
         public static void Swap(ref double one, ref double another)
         {

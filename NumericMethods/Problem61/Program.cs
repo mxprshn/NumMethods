@@ -11,22 +11,28 @@ namespace Problem61
             var systemMatrix = new Matrix
             (new double[,] 
                 {
+                    { -3.841638, 0.893829, 7.49750 },
                     { 12.44310, 1.493550, -3.841638 },
-                    { 1.493550, 9.449050, 0.893829 },
-                    { -3.841638, 0.893829, 7.49750 }
+                    { 1.493550, 9.449050, 0.893829 },                    
                 }
             );
 
             var constantVector = new Vector
             (new double[]
-                { 5.047556, 5.918212, 2.274843 }
+                { 2.274843, 5.047556, 5.918212,  }
             );
 
-            var solution = SystemSolver.Gauss(systemMatrix, constantVector);
+            var solution = SystemSolver.Jordan(systemMatrix, constantVector);
 
             Console.WriteLine(solution);
 
             Console.WriteLine(systemMatrix * solution);
+
+            Console.WriteLine(systemMatrix.Determinant);
+
+            Console.WriteLine(systemMatrix.Inverse());
+
+            Console.WriteLine(systemMatrix * systemMatrix.Inverse());
         }
     }
 }
