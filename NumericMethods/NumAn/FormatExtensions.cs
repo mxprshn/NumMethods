@@ -61,6 +61,32 @@ namespace NumAn
             table.Write(ConsoleTables.Format.Alternative);
         }
 
+        public static string Format(this double[,] values)
+        {
+            var firstRow = new string[values.GetLength(1)];
+
+            for (var j = 0; j < values.GetLength(1); ++j)
+            {
+                firstRow[j] = values[0, j].Format();
+            }
+
+            var table = new ConsoleTable(firstRow);
+
+            for (var i = 1; i < values.GetLength(0); ++i)
+            {
+                var row = new string[values.GetLength(1)];
+
+                for (var j = 0; j < values.GetLength(1); ++j)
+                {
+                    row[j] = values[i, j].Format();
+                }
+
+                table.AddRow(row.ToArray());
+            }
+
+            return table.ToStringAlternative();
+        }
+
         public static string Format(this string[,] table, int maxLength)
         {
             var result = new StringBuilder();

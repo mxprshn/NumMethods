@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaussIntegration", "GaussIn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CauchyProblem", "CauchyProblem\CauchyProblem.csproj", "{C67DBCD8-2F52-441D-8ECB-4716F9276411}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Problem61", "Problem61\Problem61.csproj", "{D35E62EB-1716-418F-AC8A-394E93B14C9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{C67DBCD8-2F52-441D-8ECB-4716F9276411}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C67DBCD8-2F52-441D-8ECB-4716F9276411}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C67DBCD8-2F52-441D-8ECB-4716F9276411}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D35E62EB-1716-418F-AC8A-394E93B14C9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D35E62EB-1716-418F-AC8A-394E93B14C9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D35E62EB-1716-418F-AC8A-394E93B14C9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D35E62EB-1716-418F-AC8A-394E93B14C9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

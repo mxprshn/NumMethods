@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -63,7 +64,7 @@ namespace NumAn
 
         public Matrix RightMultiply(Matrix other)
         {
-            if (other.Width != Height || other.Height != Width)
+            if (other.Height != Width)
             {
                 throw new ArgumentException("Incompatible matrix dimensions.");
             }
@@ -107,5 +108,7 @@ namespace NumAn
         {
             return one.Add(another);
         }
+
+        public override string ToString() => elements.Format();
     }
 }
