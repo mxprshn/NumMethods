@@ -6,6 +6,12 @@ namespace NumAn
 {
     public class MatrixUtils
     {
+        /// <summary>
+        /// Performs matrix LU-decomposition
+        /// </summary>
+        /// <param name="input">Matrix to decompose</param>
+        /// <exception cref="LuZeroDiagonalElementException">L matrix has zero element on the diagonal</exception>
+        /// <returns>Decomposition result: pair of L and U matrices</returns>
         public static (Matrix L, Matrix U) LuDecomposition(Matrix input)
         {
             if (input.Height != input.Width)

@@ -5,16 +5,30 @@ using System.Text;
 
 namespace NumAn
 {
+    /// <summary>
+    /// 2D matrix with real elements
+    /// </summary>
     public class Matrix
     {
         private double[,] elements;
 
+        /// <summary>
+        /// Number of rows in the matrix
+        /// </summary>
         public int Height => elements.GetLength(0);
+
+        /// <summary>
+        /// Number of columns in matrix
+        /// </summary>
         public int Width => elements.GetLength(1);
         
         public double this[int row, int column] => elements[row, column];
 
         private double? determinant = null;
+
+        /// <summary>
+        /// Calculates if needed and returns the determinant of the matrix. Determinant is calculated with LU-decomposition
+        /// </summary>
         public double Determinant
         {
             get
@@ -47,6 +61,10 @@ namespace NumAn
         }
 
         private double? frobeniusNorm = null;
+
+        /// <summary>
+        /// Calculates if needed and returns the Frobenius norm of the matrix
+        /// </summary>
         public double FrobeniusNorm
         {
             get
@@ -86,6 +104,12 @@ namespace NumAn
         }
 
         private Matrix inverse = null;
+
+        /// <summary>
+        /// Calculates if needed and returns inverse for the matrix. Inverse is calculated with Jordan decomposition
+        /// </summary>
+        /// <exception cref="SingularMatrixException">Matrix is singular and has no invrese</exception>
+        /// <returns>Inverse for the matrix</returns>
         public Matrix Inverse()
         {
             if (Height != Width)
@@ -110,6 +134,11 @@ namespace NumAn
         }
 
         private double? conditionNumber = null;
+
+        /// <summary>
+        /// Calculates if needed and returns condition number of the matrix
+        /// </summary>
+        /// <returns>Condition number of the matrix</returns>
         public double ConditionNumber()
         {
             if (conditionNumber.HasValue)
@@ -121,6 +150,11 @@ namespace NumAn
             return conditionNumber.Value;
         }
 
+        /// <summary>
+        /// Multiplies elements of the matrix by scalar real value
+        /// </summary>
+        /// <param name="scalar">Scalar to multiply matrix to</param>
+        /// <returns>Result matrix</returns>
         public Matrix MultiplyByScalar(double scalar)
         {
             var result = new double[Height, Width];
@@ -136,6 +170,11 @@ namespace NumAn
             return new Matrix(result);
         }
 
+        /// <summary>
+        /// Adds a matrix to this matrix
+        /// </summary>
+        /// <param name="other">Matrix to add</param>
+        /// <returns>Sum of matrices</returns>
         public Matrix Add(Matrix other)
         {
             if (other.Width != Width || other.Height != Height)
@@ -156,6 +195,11 @@ namespace NumAn
             return new Matrix(result);
         }
 
+        /// <summary>
+        /// Right multiply this matrix by another 
+        /// </summary>
+        /// <param name="other">Matrix to multiply this matrix to</param>
+        /// <returns>Matrix product</returns>
         public Matrix RightMultiply(Matrix other)
         {
             if (other.Height != Width)
@@ -205,6 +249,16 @@ namespace NumAn
             return one.Add(another);
         }
 
+        public static Matrix operator -(Matrix one, Matrix another)
+        {
+            return one.Add(-1 * another);
+        }
+
+        /// <summary>
+        /// Creates identity matrix of given size
+        /// </summary>
+        /// <param name="size">Size of the matrix to create</param>
+        /// <returns>Identity matrix</returns>
         public static Matrix Identity(int size)
         {
             var elements = new double[size, size];
@@ -216,7 +270,6 @@ namespace NumAn
 
             return new Matrix(elements);
         }
-
 
         [Serializable]
         public class SingularMatrixException : Exception

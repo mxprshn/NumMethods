@@ -4,6 +4,9 @@ using System.Text;
 
 namespace NumAn
 {
+    /// <summary>
+    /// 2D vector with real elements
+    /// </summary>
     public class Vector : Matrix
     {
         public Vector(double[] elements) : base(ToTwoDimensionalArray(elements)) { }

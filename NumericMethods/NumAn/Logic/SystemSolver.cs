@@ -9,7 +9,14 @@ namespace NumAn
     {
         public class SystemSolver
         {
-            public static Vector Gauss(Matrix systemMatrix, Vector constantVector)
+            /// <summary>
+            /// Solves system of linear equations Ax=b with Gauss elimination. Leading element is chosen by column
+            /// </summary>
+            /// <param name="systemMatrix">Matrix of the system: A</param>
+            /// <param name="constantVector">Constant vector (right part): b</param>
+            /// <param name="logger">Logger to write messages</param>
+            /// <returns>Solution vector: x</returns>
+            public static Vector Gauss(Matrix systemMatrix, Vector constantVector, ILogger logger = null)
             {
                 if (systemMatrix.Height != systemMatrix.Width)
                 {
@@ -23,13 +30,13 @@ namespace NumAn
 
                 var augmented = CreateAugmentedMatrix(systemMatrix, constantVector);
 
-                Console.WriteLine(augmented.Format());
+                logger?.Log(augmented.Format());
 
                 for (var i = 0; i < augmented.GetLength(0); ++i)
                 {
                     MoveMaxValueSubmatrixRowToTop(augmented, i);
 
-                    Console.WriteLine(augmented.Format());
+                    logger?.Log(augmented.Format());
 
                     var divisor = augmented[i, i];
 
@@ -48,7 +55,7 @@ namespace NumAn
                         }
                     }
 
-                    Console.WriteLine(augmented.Format());
+                    logger?.Log(augmented.Format());
                 }
 
                 var solution = new double[systemMatrix.Height];
@@ -70,7 +77,14 @@ namespace NumAn
                 return new Vector(solution);
             }
 
-            public static Matrix Jordan(Matrix systemMatrix, Matrix constantMatrix)
+            /// <summary>
+            /// Solves systems of linear equations AX=B (matrix equation) with Jordan elimination. Leading element is chosen by column
+            /// </summary>
+            /// <param name="systemMatrix">Matrix of the system: A</param>
+            /// <param name="constantMatrix">Constant matrix (right part): B</param>
+            /// <param name="logger">Logger to write messages</param>
+            /// <returns>Solution matrix: X</returns>
+            public static Matrix Jordan(Matrix systemMatrix, Matrix constantMatrix, ILogger logger = null)
             {
                 if (systemMatrix.Height != systemMatrix.Width)
                 {
@@ -84,13 +98,13 @@ namespace NumAn
 
                 var augmented = CreateAugmentedMatrix(systemMatrix, constantMatrix);
 
-                Console.WriteLine(augmented.Format());
+                logger?.Log(augmented.Format());
 
                 for (var i = 0; i < augmented.GetLength(0); ++i)
                 {
                     MoveMaxValueSubmatrixRowToTop(augmented, i);
 
-                    Console.WriteLine(augmented.Format());
+                    logger?.Log(augmented.Format());
 
                     var divisor = augmented[i, i];
 
@@ -114,7 +128,7 @@ namespace NumAn
                         }
                     }
 
-                    Console.WriteLine(augmented.Format());
+                    logger?.Log(augmented.Format());
                 }
 
                 var solution = new double[constantMatrix.Height, constantMatrix.Width];
@@ -130,6 +144,12 @@ namespace NumAn
                 return new Matrix(solution);
             }
 
+            /// <summary>
+            /// Appends constant matrix to system matrix
+            /// </summary>
+            /// <param name="systemMatrix">Matrix of the system</param>
+            /// <param name="constantMatrix">Constant matrix</param>
+            /// <returns>Result of append</returns>
             private static double[,] CreateAugmentedMatrix(Matrix systemMatrix, Matrix constantMatrix)
             {
                 var result = new double[systemMatrix.Height, systemMatrix.Width + constantMatrix.Width];
@@ -150,6 +170,11 @@ namespace NumAn
                 return result;
             }
 
+            /// <summary>
+            /// Finds the row with max value in submatrix and moves it to the top of it
+            /// </summary>
+            /// <param name="matrix">Whole matrix</param>
+            /// <param name="topLeftCornerIndex">Top left corner index of the submatrix to find max</param>
             private static void MoveMaxValueSubmatrixRowToTop(double[,] matrix, int topLeftCornerIndex)
             {
                 var maxValue = Math.Abs(matrix[topLeftCornerIndex, topLeftCornerIndex]);
