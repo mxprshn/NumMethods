@@ -78,10 +78,10 @@ fun main(args: Array<String>) {
                 optimalQForUpperRelaxationMethod - upperRelaxationQStep,
                 approximationIndex
             ).getLastRow()
-        println("Optimal - ${upperRelaxationQStep.format()} upper relaxation solution:")
+        println("Optimal - ${upperRelaxationQStep.format(2)} upper relaxation solution:")
         println(upperRelaxationWithOptimalSolutionMinus.toTable())
         val upperRelaxationWithOptimalSolutionMinusActualError = (upperRelaxationWithOptimalSolutionMinus - exactSolution).norm
-        println("Actual optimal - ${upperRelaxationQStep.format()} " +
+        println("Actual optimal - ${upperRelaxationQStep.format(2)} " +
                 "upper relaxation method error: ${upperRelaxationWithOptimalSolutionMinusActualError.eFormat()}")
 
         val upperRelaxationWithOptimalSolutionPlus =
@@ -89,10 +89,10 @@ fun main(args: Array<String>) {
                 optimalQForUpperRelaxationMethod + upperRelaxationQStep,
                 approximationIndex
             ).getLastRow()
-        println("Optimal + ${upperRelaxationQStep.format()} upper relaxation solution:")
+        println("Optimal + ${upperRelaxationQStep.format(2)} upper relaxation solution:")
         println(upperRelaxationWithOptimalSolutionPlus.toTable())
         val upperRelaxationWithOptimalSolutionPlusActualError = (upperRelaxationWithOptimalSolutionPlus - exactSolution).norm
-        println("Actual optimal + ${upperRelaxationQStep.format()} " +
+        println("Actual optimal + ${upperRelaxationQStep.format(2)} " +
                 "upper relaxation method error: ${upperRelaxationWithOptimalSolutionPlusActualError.eFormat()}")
 
         table {
@@ -110,12 +110,12 @@ fun main(args: Array<String>) {
             row("Refined Seidel method", refinedSeidelSolution.toTable(), refinedSeidelActualError.eFormat())
             row("Optimal upper relaxation", upperRelaxationWithOptimalSolution.toTable(), upperRelaxationWithOptimalSolutionActualError.eFormat())
             row(
-                "Optimal - ${upperRelaxationQStep.format()} upper relaxation",
+                "Optimal - ${upperRelaxationQStep.format(2)} upper relaxation",
                 upperRelaxationWithOptimalSolutionMinus.toTable(),
                 upperRelaxationWithOptimalSolutionMinusActualError.eFormat()
             )
             row(
-                "Optimal + ${upperRelaxationQStep.format()} upper relaxation",
+                "Optimal + ${upperRelaxationQStep.format(2)} upper relaxation",
                 upperRelaxationWithOptimalSolutionPlus.toTable(),
                 upperRelaxationWithOptimalSolutionPlusActualError.eFormat()
             )

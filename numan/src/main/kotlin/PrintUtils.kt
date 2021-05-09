@@ -37,4 +37,4 @@ fun RealVector.toTable(): Table {
 }
 
 fun Double.format(precision: Int = 11): String = String.format("%.${precision}f", this)
-fun Double.eFormat(precision: Int = 11): String = String.format("%.${precision}}e", this)
+fun Double.eFormat(precision: Int = 11): String = String.format("%.${precision}e", this)
