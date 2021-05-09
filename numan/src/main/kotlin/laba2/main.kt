@@ -14,7 +14,7 @@ fun main(args: Array<String>) {
     val approximationIndex = 8
     val upperRelaxationQStep = 0.1
 
-    Lab2(Data.variant10Matrix.toMatrix(), Data.variant10Constants.toVector()).apply {
+    Lab2(Data.lab2Variant10Matrix.toMatrix(), Data.lab2Variant10Constants.toVector()).apply {
         println("A matrix:")
         println(sourceMatrix.toTable())
 
