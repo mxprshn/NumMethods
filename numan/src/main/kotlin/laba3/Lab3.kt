@@ -15,8 +15,6 @@ class Lab3(val matrix: RealMatrix,
            val emergencyIterationsThreshold: Int,
            val initialVector: RealVector
 ) {
-    class TooManyIterationsException: Throwable()
-
     data class IterationResult(val lambda: Double, val eigenvector: RealVector, val posteriorEstimation: Double)
 
     val exactEigenvalues by lazy {
