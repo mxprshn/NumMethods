@@ -29,6 +29,10 @@ operator fun RealVector.set(index: Int, value: Double) = this.setEntry(index, va
 operator fun RealVector.minus(other: RealVector): RealVector = this.subtract(other)
 operator fun RealVector.plus(other: RealVector): RealVector = this.add(other)
 operator fun RealVector.div(scalar: Double): RealVector = 1 / scalar * this
+fun RealVector.normalize(): RealVector {
+    val norm = this.norm
+    return this.map { it / norm }
+}
 infix fun RealVector.dot(other: RealVector): Double = this.dotProduct(other)
 
 fun DoubleArray.toVector() = ArrayRealVector(this)

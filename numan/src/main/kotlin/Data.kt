@@ -14,4 +14,6 @@ object Data {
         doubleArrayOf(-0.04644, 0.56023, 0.01075),
         doubleArrayOf(0.33422, 0.01075, -0.88342)
     )
+
+    val lab3Variant10InitialVector = doubleArrayOf(1.0, 1.0, 1.0)
 }
