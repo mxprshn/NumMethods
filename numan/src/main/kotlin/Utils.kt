@@ -6,3 +6,4 @@ import org.apache.commons.math3.linear.RealVector
 fun arrayOfZeros(size: Int) = DoubleArray(size) { 0.0 }
 fun zeroMatrix(size: Int): RealMatrix = MatrixUtils.createRealMatrix(Array(size) { arrayOfZeros(size) })
 fun zeroVector(size: Int): RealVector = ArrayRealVector(arrayOfZeros(size))
+fun kronecker(one: Int, another: Int) = if (one == another) 1.0 else 0.0
