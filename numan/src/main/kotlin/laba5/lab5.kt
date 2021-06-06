@@ -29,13 +29,6 @@ data class ExactSolution(
  */
 val exactSolutions = listOf(
     ExactSolution(
-        u = { x: Double, t: Double -> x.pow(2) + t.pow(2) },
-        dudt = { x: Double, t: Double -> 2 * t },
-        dudx = { x: Double, t: Double -> 2 * x },
-        dudx2 = { x: Double, t: Double -> 2.0 },
-        "x^2 + t^2"
-    ),
-    ExactSolution(
         u = { x: Double, t: Double -> x + t },
         dudt = { x: Double, t: Double -> 1.0 },
         dudx = { x: Double, t: Double -> 1.0 },
@@ -48,17 +41,10 @@ val exactSolutions = listOf(
         dudx = { x: Double, t: Double -> 3 * x.pow(2) },
         dudx2 = { x: Double, t: Double -> 6 * x },
         "x^3 + t^3"
-    ),
-    ExactSolution(
-        u = { x: Double, t: Double -> x.pow(2) + t },
-        dudt = { x: Double, t: Double -> 1.0 },
-        dudx = { x: Double, t: Double -> 2 * x },
-        dudx2 = { x: Double, t: Double -> 2.0 },
-        "x^2 + t"
-    ),
+    )
 )
 
-val sigmas = listOf(0.0, 0.5, 1.0)
+val sigmas = listOf(0.0, 1.0)
 
 /**
  * Параметры системы
@@ -128,7 +114,7 @@ fun calculate(sigma: Double, exactSolution: ExactSolution) {
     data class SolutionTableEntry(val h: Double, val tau: Double, val diffWithExact: Double, val diffWithPrev: Double?, val u: RealMatrix)
     val solutions = mutableListOf<SolutionTableEntry>()
 
-    listOf(0.2, 0.1, 0.05, 0.025, 0.0125).forEach { h ->
+    listOf(0.2, 0.1, 0.05, 0.025).forEach { h ->
         val N = ((equation.xTo - equation.xFrom) / h).roundToInt()
         val tau = 0.01
         val M = ((equation.tTo - equation.tFrom) / tau).roundToInt()
